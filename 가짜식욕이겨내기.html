@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>가짜식욕 이겨내기</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+    background: #f0f4f2;
+    font-size: 16px;
+    color: #222;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  header {
+    background: #2D7A55;
+    color: #fff;
+    text-align: center;
+    padding: 22px 16px 18px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+
+  .hospital {
+    color: #FFD6D6;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+    margin-bottom: 6px;
+  }
+
+  header h1 {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+  }
+
+  .subtitle {
+    font-size: 12px;
+    margin-top: 6px;
+    opacity: 0.85;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+
+  main {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 16px 14px 40px;
+  }
+
+  .intro-card {
+    background: #fff;
+    padding: 14px 16px;
+    border-radius: 14px;
+    margin-bottom: 14px;
+    border-left: 4px solid #2D7A55;
+    font-size: 14px;
+    color: #444;
+    line-height: 1.5;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #2D7A55;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 18px 0 8px 2px;
+  }
+
+  .card {
+    background: #fff;
+    padding: 14px 16px;
+    border-radius: 14px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+
+  .card p {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.45;
+    color: #1a1a1a;
+    margin-bottom: 10px;
+  }
+
+  .q-num {
+    display: inline-block;
+    background: #2D7A55;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 22px;
+    margin-right: 7px;
+    flex-shrink: 0;
+  }
+
+  .q-title {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+  }
+
+  .q-text {
+    flex: 1;
+  }
+
+  .toggle-wrap {
+    display: flex;
+    gap: 8px;
+  }
+
+  .toggle-btn {
+    flex: 1;
+    padding: 10px 0;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    background: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    color: #999;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    text-align: center;
+  }
+
+  .toggle-btn.selected-no {
+    border-color: #e74c3c;
+    background: #fff5f5;
+    color: #e74c3c;
+  }
+
+  .toggle-btn.selected-yes {
+    border-color: #e74c3c;
+    background: #fff5f5;
+    color: #e74c3c;
+  }
+
+  .toggle-btn.unselected {
+    border-color: #eee;
+    background: #fafafa;
+    color: #ccc;
+  }
+
+  .submit-btn {
+    width: 100%;
+    padding: 17px;
+    background: linear-gradient(135deg, #2D7A55, #3da870);
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    font-size: 17px;
+    font-weight: 800;
+    margin-top: 18px;
+    cursor: pointer;
+    letter-spacing: -0.3px;
+    box-shadow: 0 4px 16px rgba(45,122,85,0.35);
+    transition: transform 0.1s, box-shadow 0.1s;
+  }
+
+  .submit-btn:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 8px rgba(45,122,85,0.25);
+  }
+
+  .result-section { display: none; margin-top: 20px; }
+
+  .result-box {
+    padding: 16px;
+    border-radius: 14px;
+    margin-bottom: 10px;
+  }
+
+  .result-box h3 {
+    font-size: 16px;
+    font-weight: 800;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .result-box p, .result-box li {
+    font-size: 14px;
+    line-height: 1.65;
+    color: #333;
+  }
+
+  .result-box ul {
+    padding-left: 18px;
+  }
+
+  .result-box li {
+    margin-bottom: 5px;
+  }
+
+  .r-result { background: #e8f5e9; border-left: 4px solid #2D7A55; }
+  .r-reason { background: #ede7f6; border-left: 4px solid #7c4dff; }
+  .r-solution { background: #fff3e0; border-left: 4px solid #ff9800; }
+  .r-exercise { background: #e3f2fd; border-left: 4px solid #1976d2; }
+
+  .type-badge {
+    display: inline-block;
+    font-size: 22px;
+    margin-bottom: 4px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hospital">🏥 HJ매그놀리아 국제병원 산부인과</div>
+  <h1>🍽️ 가짜식욕 이겨내기</h1>
+  <div class="subtitle">뇌새김 다이어트 클리닉</div>
+</header>
+
+<main>
+
+  <div class="intro-card">
+    식욕이 생길 때 나오는 증상을 답변해주세요 😊
+  </div>
+
+  <div id="questions-wrap"></div>
+
+  <button class="submit-btn" onclick="analyze()">결과 보기 →</button>
+
+  <div class="result-section" id="result-section">
+    <div class="result-box r-result" id="result"></div>
+    <div class="result-box r-reason" id="reason"></div>
+    <div class="result-box r-solution" id="solution"></div>
+    <div class="result-box r-exercise" id="exercise"></div>
+  </div>
+
+</main>
+
+<script>
+const questions = [
+  { text: "배고파서 아무거나 먹고 싶다", group: "에너지" },
+  { text: "마지막 식사 후 4시간 이상 지났다", group: "에너지" },
+  { text: "식욕이 일 때 닭가슴살도 먹고 싶다는 생각이 든다", group: "에너지" },
+  { text: "특정 음식이 딱 떠오른다", group: "도파민" },
+  { text: "배부른데도 더 먹고 싶다", group: "도파민" },
+  { text: "음식 보면 갑자기 먹고 싶어진다", group: "도파민" },
+  { text: "배는 안 고픈데 기분 또는 허전함 때문에 먹고 싶다", group: "허전함" },
+  { text: "먹고 나서 후회한 적 많다", group: "허전함" },
+  { text: "수시로 먹을 것을 찾거나 지금 이 시간만 되면 뭔가 먹고 싶다", group: "습관" },
+  { text: "TV/유튜브 보면 자동으로 먹고 싶어진다", group: "습관" },
+];
+
+const groupLabels = {
+  "에너지": "🥩 에너지 체크",
+  "도파민": "🍩 도파민 체크",
+  "허전함": "😶 감정 체크",
+  "습관": "🔁 습관 체크"
+};
+
+const answers = new Array(10).fill(0);
+let lastGroup = "";
+const wrap = document.getElementById("questions-wrap");
+
+questions.forEach((q, i) => {
+  if (q.group !== lastGroup) {
+    const label = document.createElement("div");
+    label.className = "section-label";
+    label.textContent = groupLabels[q.group];
+    wrap.appendChild(label);
+    lastGroup = q.group;
+  }
+
+  const card = document.createElement("div");
+  card.className = "card";
+  card.innerHTML = `
+    <div class="q-title">
+      <span class="q-num">${i + 1}</span>
+      <span class="q-text"><p>${q.text}</p></span>
+    </div>
+    <div class="toggle-wrap">
+      <button class="toggle-btn" id="no-${i}" onclick="setAnswer(${i}, 0)">❌ NO</button>
+      <button class="toggle-btn" id="yes-${i}" onclick="setAnswer(${i}, 1)">✅ YES</button>
+    </div>
+  `;
+  wrap.appendChild(card);
+});
+
+function setAnswer(i, val) {
+  answers[i] = val;
+  const noBtn = document.getElementById(`no-${i}`);
+  const yesBtn = document.getElementById(`yes-${i}`);
+  if (val === 0) {
+    noBtn.className = "toggle-btn selected-no";
+    yesBtn.className = "toggle-btn unselected";
+  } else {
+    noBtn.className = "toggle-btn unselected";
+    yesBtn.className = "toggle-btn selected-yes";
+  }
+}
+
+function analyze() {
+  const energy   = answers[0] + answers[1] + answers[2];
+  const dopamine = answers[3] + answers[4] + answers[5];
+  const empty    = answers[6] + answers[7];
+  const habit    = answers[8] + answers[9];
+
+  let type, reason, solution, exercise;
+  const max = Math.max(energy, dopamine, empty, habit);
+
+  if (max === energy) {
+    type = "🥩 에너지 필요식욕";
+    reason = "몸에 에너지가 부족해서 생긴 <b>정상적인 배고픔</b>입니다.";
+    solution = `<ul>
+      <li>단백질을 먼저 섭취하세요</li>
+      <li>식사를 거르지 마세요</li>
+      <li>규칙적인 식사 시간을 지키세요</li>
+    </ul>`;
+    exercise = `<ul>
+      <li>❌ 운동보다 식사가 먼저입니다</li>
+      <li>가볍게 걷기만 가능</li>
+      <li>💡 에너지 부족 상태에서 운동하면 더 배고파집니다</li>
+    </ul>`;
+  } else if (max === dopamine) {
+    type = "🍩 도파민 식욕";
+    reason = "맛과 자극 때문에 생기는 <b>가짜 식욕</b>입니다.";
+    solution = `<ul>
+      <li>10분만 참기</li>
+      <li>간식을 집에 두지 않기</li>
+      <li>물 한 잔 마시기</li>
+    </ul>`;
+    exercise = `<ul>
+      <li>제자리 뛰기 1분 × 5회</li>
+      <li>스쿼트 10개 × 3세트</li>
+      <li>💡 짧고 강한 운동이 식욕을 떨어뜨립니다</li>
+    </ul>`;
+  } else if (max === empty) {
+    type = "😶 허전함 식욕";
+    reason = "스트레스와 감정 때문에 생기는 <b>감정성 식욕</b>입니다.";
+    solution = `<ul>
+      <li>지금 감정을 글로 써보기</li>
+      <li>혼자 있지 않기</li>
+      <li>수면이 충분한지 확인하기</li>
+    </ul>`;
+    exercise = `<ul>
+      <li>10~20분 걷기</li>
+      <li>스트레칭 5분</li>
+      <li>💡 스트레스 감소 → 식욕 감소</li>
+    </ul>`;
+  } else {
+    type = "🔁 습관 식욕";
+    reason = "습관적으로 반복된 행동에서 생긴 <b>조건반사 식욕</b>입니다.";
+    solution = `<ul>
+      <li>먹는 시간 조금씩 바꾸기</li>
+      <li>TV 보며 먹지 않기</li>
+      <li>야식 대신 따뜻한 물 한 잔</li>
+    </ul>`;
+    exercise = `<ul>
+      <li>5분만 몸 움직이기</li>
+      <li>양치하기 (식욕 차단 효과!)</li>
+      <li>💡 행동을 바꾸면 식욕이 끊어집니다</li>
+    </ul>`;
+  }
+
+  document.getElementById("result").innerHTML =
+    `<h3>📊 진단 결과</h3><div class="type-badge">${type}</div>`;
+  document.getElementById("reason").innerHTML =
+    `<h3>🧠 원인</h3><p>${reason}</p><br><p>충분히 극복할 수 있습니다! 💪</p>`;
+  document.getElementById("solution").innerHTML =
+    `<h3>📌 해결 방법</h3>${solution}`;
+  document.getElementById("exercise").innerHTML =
+    `<h3>🏃 운동 처방</h3>${exercise}`;
+
+  const section = document.getElementById("result-section");
+  section.style.display = "block";
+  setTimeout(() => section.scrollIntoView({ behavior: "smooth", block: "start" }), 100);
+}
+</script>
+
+</body>
+</html>
